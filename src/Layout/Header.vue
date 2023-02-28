@@ -35,16 +35,9 @@
                         </li>
                         <li>
                             <router-link
-                                to="#"
+                                to="/edit"
                                 class="block py-2 pl-3 pr-4 text-white rounded md:hover:bg-transparent md:border-0 hover:text-gray-700 md:p-0 cursor-pointer"
-                                >THỨC ĂN NHANH</router-link
-                            >
-                        </li>
-                        <li>
-                            <router-link
-                                to="#"
-                                class="block py-2 pl-3 pr-4 text-white rounded md:hover:bg-transparent md:border-0 hover:text-gray-700 md:p-0 cursor-pointer"
-                                >BÁNH NGỌT</router-link
+                                >CHỈNH SỬA ĐƠN HÀNG</router-link
                             >
                         </li>
                         <li>

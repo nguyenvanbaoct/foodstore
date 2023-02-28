@@ -1,11 +1,7 @@
 <template>
-    <div>
-        <p>history page</p>
-    </div>
+    <div>history</div>
 </template>
 <script>
-export default {
-    name: "HistoryPage",
-};
+export default {};
 </script>
 <style></style>

@@ -168,12 +168,13 @@
                                     class="w-20 border-x-2 border-y-2 border-black text-center text-xl font-medium"
                                 />
                             </div>
-                            <button
+                            <router-link
+                                to="/cart"
                                 @click="addToCart"
                                 class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded"
                             >
                                 Add To Cart
-                            </button>
+                            </router-link>
                         </div>
                         <div class="flex mt-24">
                             <div
@@ -214,18 +215,18 @@ export default {
             localStorage.setItem("productParams", JSON.stringify(this.product));
         },
         addToCart() {
-            this.postCart({
-                items: [
-                    {
-                        id: this.productParams.id,
-                        name: this.productParams.name,
-                        price: this.productParams.price,
-                        quantity: this.quantity,
-                    },
-                ],
-                total: this.productParams.price * this.quantity,
-                paid: false,
-            });
+            // this.postCart({
+            //     items: [
+            //         {
+            //             id: this.productParams.id,
+            //             name: this.productParams.name,
+            //             price: this.productParams.price,
+            //             quantity: this.quantity,
+            //         },
+            //     ],
+            //     total: this.productParams.price * this.quantity,
+            //     paid: false,
+            // });
         },
     },
     mounted() {

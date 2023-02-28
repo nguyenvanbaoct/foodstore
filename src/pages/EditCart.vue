@@ -5,38 +5,50 @@
                 <caption
                     class="p-5 text-lg font-semibold text-left text-gray-900 bg-white"
                 >
-                    Our products
+                    Chỉnh sửa đơn hàng
                 </caption>
                 <thead
-                    class="text-xs text-gray-700 uppercase bg-gray-50 border-b"
+                    class="text-xs text-gray-700 uppercase bg-gray-100 border-b"
                 >
                     <tr>
-                        <th scope="col" class="px-6 py-3">Tên món ăn</th>
-                        <th scope="col" class="px-6 py-3">Số lượng</th>
+                        <th scope="col" class="px-6 py-3">Giỏ hàng</th>
                         <th scope="col" class="px-6 py-3">Tổng tiền</th>
                         <th scope="col" class="px-6 py-3">Tình trạng</th>
-                        <th scope="col" class="px-6 py-3">
-                            <span class="sr-only">Thanh toán</span>
-                        </th>
+                        <th scope="col" class="px-6 py-3">Action</th>
                     </tr>
                 </thead>
-                <tbody v-for="cart in cartArr" :key="cart.id">
-                    <tr class="bg-white border-b">
+                <tbody
+                    v-for="cart in cartArr.slice(cartArr.length - 1)"
+                    :key="cart.id"
+                >
+                    <tr class="bg-white border-b" v-if="!cart.paid">
                         <th
                             scope="row"
                             class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                         >
-                            Apple MacBook Pro 17"
-                        </th>
-                        <td class="px-6 py-4">1 {{ cart.id }}</td>
-                        <td class="px-6 py-4">Laptop</td>
-                        <td class="px-6 py-4">$2999</td>
-                        <td class="px-6 py-4 text-right">
-                            <a
-                                href="#"
-                                class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                                >Edit</a
+                            <tr
+                                class="bg-white border-b"
+                                v-for="(item, index) in cart.items"
+                                :key="index"
                             >
+                                {{
+                                    item.name
+                                }}
+                            </tr>
+                        </th>
+                        <td class="px-6 py-4">$ {{ cart.total }}</td>
+                        <td class="px-6 py-4">
+                            {{
+                                cart.paid ? "Đã thanh toán" : "Chưa thanh toán"
+                            }}
+                        </td>
+                        <td class="px-6 py-4">
+                            <button
+                                @click="setData"
+                                class="font-medium text-blue-600 dark:text-blue-500 border px-5 py-2 hover:outline"
+                            >
+                                Thanh toán
+                            </button>
                         </td>
                     </tr>
                 </tbody>
@@ -48,23 +60,17 @@
 import { mapGetters, mapActions } from "vuex";
 
 export default {
-    data() {
-        return {
-            // carts: this.cartArr,
-            // cartItem: {},
-        };
-    },
     created() {
         this.getCartArr();
-        // console.log(this.getCartArr());
     },
     computed: {
         ...mapGetters(["cartArr"]),
     },
     methods: {
         ...mapActions(["getCartArr"]),
+        setData() {
+            this.cartArr = "";
+        },
     },
-    mounted() {},
 };
 </script>
-<style></style>

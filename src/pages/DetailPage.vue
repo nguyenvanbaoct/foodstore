@@ -6,7 +6,7 @@
                     <img
                         alt="ecommerce"
                         class="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded"
-                        :src="producrParams.image"
+                        :src="productParams.image"
                         style="cursor: auto"
                     />
                     <div
@@ -17,7 +17,7 @@
                             class="text-gray-900 text-3xl title-font font-medium mb-1"
                             style="cursor: auto"
                         >
-                            {{ producrParams.name }}
+                            {{ productParams.name }}
                         </h1>
                         <div class="flex mb-4">
                             <span class="flex items-center">
@@ -138,7 +138,7 @@
                             </span>
                         </div>
                         <p class="leading-relaxed">
-                            {{ producrParams.description }}
+                            {{ productParams.description }}
                         </p>
                         <div
                             class="flex mt-6 items-center pb-5 border-b-2 border-gray-100 mb-5"
@@ -147,7 +147,7 @@
                                 <span class="mr-3"
                                     >MFG:
                                     {{
-                                        formatDate(producrParams.createdAt)
+                                        formatDate(productParams.createdAt)
                                     }}</span
                                 >
                             </div>
@@ -156,11 +156,11 @@
                             <div
                                 class="title-font font-medium text-2xl text-gray-900"
                             >
-                                $ {{ producrParams.price }}
+                                $ {{ productParams.price }}
                             </div>
                             <div class="flex ml-24">
                                 <input
-                                    value="1"
+                                    v-model="quantity"
                                     min="0"
                                     max="50"
                                     step="1"
@@ -169,10 +169,19 @@
                                 />
                             </div>
                             <button
+                                @click="addToCart"
                                 class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded"
                             >
                                 Add To Cart
                             </button>
+                        </div>
+                        <div class="flex mt-24">
+                            <div
+                                class="title-font font-medium text-2xl text-gray-900"
+                            >
+                                <span>Total:</span> $
+                                {{ productParams.price * quantity }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -181,31 +190,48 @@
     </div>
 </template>
 <script>
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import moment from "moment";
 
 export default {
     data() {
         return {
             product: {},
-            producrParams: {},
+            productParams: {},
+            quantity: 1,
+            total: 0,
         };
     },
     computed: {
         ...mapGetters(["foods"]),
     },
     methods: {
+        ...mapActions(["postCart"]),
         formatDate(date) {
             return moment(date).format("DD-MM-YYYY");
         },
         saveData() {
             localStorage.setItem("productParams", JSON.stringify(this.product));
         },
+        addToCart() {
+            this.postCart({
+                items: [
+                    {
+                        id: this.productParams.id,
+                        name: this.productParams.name,
+                        price: this.productParams.price,
+                        quantity: this.quantity,
+                    },
+                ],
+                total: this.productParams.price * this.quantity,
+                paid: false,
+            });
+        },
     },
     mounted() {
         this.id = this.$route.params.id;
         this.product = this.foods.find((product) => product.id == this.id);
-        this.producrParams = JSON.parse(localStorage.getItem("productParams"));
+        this.productParams = JSON.parse(localStorage.getItem("productParams"));
     },
 };
 </script>

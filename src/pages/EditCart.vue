@@ -17,10 +17,7 @@
                         <th scope="col" class="px-6 py-3">Action</th>
                     </tr>
                 </thead>
-                <tbody
-                    v-for="cart in cartArr.slice(cartArr.length - 1)"
-                    :key="cart.id"
-                >
+                <tbody v-for="cart in cartArr" :key="cart.id">
                     <tr class="bg-white border-b" v-if="!cart.paid">
                         <th
                             scope="row"
@@ -44,7 +41,6 @@
                         </td>
                         <td class="px-6 py-4">
                             <button
-                                @click="setData"
                                 class="font-medium text-blue-600 dark:text-blue-500 border px-5 py-2 hover:outline"
                             >
                                 Thanh toán
@@ -64,13 +60,15 @@ export default {
         this.getCartArr();
     },
     computed: {
-        ...mapGetters(["cartArr"]),
+        ...mapGetters(["cartArr", "paid"]),
     },
     methods: {
-        ...mapActions(["getCartArr"]),
-        setData() {
-            this.cartArr = "";
-        },
+        ...mapActions(["getCartArr", "putCart"]),
+        // setData() {
+        //     this.putCart({
+        //         paid: true,
+        //     });
+        // },
     },
 };
 </script>

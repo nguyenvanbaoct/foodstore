@@ -1,6 +1,10 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import HomePage from "../pages/Home/HomePage.vue";
+import DetailPage from "../pages/DetailPage.vue";
+import HistoryPage from "../pages/HistoryPage.vue";
+import EditCart from "../pages/EditCart.vue";
+import Cart from "../pages/Cart/Cart.vue";
 
 Vue.use(VueRouter);
 
@@ -16,22 +20,22 @@ const router = new VueRouter({
         {
             path: "/detail/:id",
             name: "DetailPage",
-            component: () => import("../pages/DetailPage.vue"),
+            component: DetailPage,
         },
         {
             path: "/history",
             name: "HistoryPage",
-            component: () => import("../pages/HistoryPage.vue"),
+            component: HistoryPage,
         },
         {
             path: "/edit",
             name: "EditCart",
-            component: () => import("../pages/EditCart.vue"),
+            component: EditCart,
         },
         {
             path: "/cart",
-            name: "cart",
-            component: () => import("../pages/Cart/Cart.vue"),
+            name: "CartPage",
+            component: Cart,
         },
     ],
 });

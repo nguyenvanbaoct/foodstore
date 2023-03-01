@@ -14,5 +14,6 @@ export const postCart = (dataCart) => {
 };
 
 export const putCart = (dataCart) => {
-    return axios.put(`${BASE_URL}/cart`, dataCart);
+    return axios.put(`${BASE_URL}/cart/`, dataCart);
 };
+// ${id}

@@ -6,7 +6,7 @@
                     <img
                         alt="ecommerce"
                         class="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded"
-                        :src="productParams.image"
+                        :src="product.image"
                         style="cursor: auto"
                     />
                     <div
@@ -17,7 +17,7 @@
                             class="text-gray-900 text-3xl title-font font-medium mb-1"
                             style="cursor: auto"
                         >
-                            {{ productParams.name }}
+                            {{ product.name }}
                         </h1>
                         <div class="flex mb-4">
                             <span class="flex items-center">
@@ -138,7 +138,7 @@
                             </span>
                         </div>
                         <p class="leading-relaxed">
-                            {{ productParams.description }}
+                            {{ product.description }}
                         </p>
                         <div
                             class="flex mt-6 items-center pb-5 border-b-2 border-gray-100 mb-5"
@@ -146,9 +146,7 @@
                             <div class="flex">
                                 <span class="mr-3"
                                     >MFG:
-                                    {{
-                                        formatDate(productParams.createdAt)
-                                    }}</span
+                                    {{ formatDate(product.createdAt) }}</span
                                 >
                             </div>
                         </div>
@@ -156,7 +154,7 @@
                             <div
                                 class="title-font font-medium text-2xl text-gray-900"
                             >
-                                $ {{ productParams.price }}
+                                $ {{ product.price }}
                             </div>
                             <div class="flex ml-24">
                                 <input
@@ -168,20 +166,19 @@
                                     class="w-20 border-x-2 border-y-2 border-black text-center text-xl font-medium"
                                 />
                             </div>
-                            <router-link
-                                to="/cart"
+                            <button
                                 @click="addToCart"
                                 class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded"
                             >
                                 Add To Cart
-                            </router-link>
+                            </button>
                         </div>
                         <div class="flex mt-24">
                             <div
                                 class="title-font font-medium text-2xl text-gray-900"
                             >
                                 <span>Total:</span> $
-                                {{ productParams.price * quantity }}
+                                {{ product.price * quantity }}
                             </div>
                         </div>
                     </div>
@@ -191,48 +188,89 @@
     </div>
 </template>
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions } from "vuex";
 import moment from "moment";
+import axios from "axios";
+import { BASE_URL } from "../services/config.url";
 
 export default {
     data() {
         return {
             product: {},
-            productParams: {},
             quantity: 1,
             total: 0,
+            carts: "",
         };
-    },
-    computed: {
-        ...mapGetters(["foods"]),
     },
     methods: {
         ...mapActions(["postCart"]),
         formatDate(date) {
             return moment(date).format("DD-MM-YYYY");
         },
-        saveData() {
-            localStorage.setItem("productParams", JSON.stringify(this.product));
+        getFoodDetail() {
+            this.id = this.$route.params.id;
+            axios
+                .get(`${BASE_URL}/food/${this.id}`)
+                .then((res) => {
+                    const result = res.data;
+                    this.product = result;
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         },
         addToCart() {
-            // this.postCart({
-            //     items: [
-            //         {
-            //             id: this.productParams.id,
-            //             name: this.productParams.name,
-            //             price: this.productParams.price,
-            //             quantity: this.quantity,
-            //         },
-            //     ],
-            //     total: this.productParams.price * this.quantity,
-            //     paid: false,
-            // });
+            if (this.carts !== undefined) {
+                console.log("them moi vao gio hang", this.carts.items);
+                console.log("total cart", this.carts.total);
+                let idCart = this.carts.id;
+                let itemsCart = this.carts.items;
+                let newItem = [
+                    {
+                        id: this.product.id,
+                        name: this.product.name,
+                        price: this.product.price,
+                        quantity: this.quantity,
+                    },
+                ];
+                axios.put(`${BASE_URL}/cart/${idCart}`, {
+                    items: [...itemsCart, ...newItem],
+                    total:
+                        this.product.price * this.quantity + this.carts.total,
+                    paid: false,
+                });
+            } else {
+                this.postCart({
+                    items: [
+                        {
+                            id: this.product.id,
+                            name: this.product.name,
+                            price: this.product.price,
+                            quantity: this.quantity,
+                        },
+                    ],
+                    total: this.product.price * this.quantity,
+                    paid: false,
+                });
+            }
+        },
+        getCartList() {
+            axios
+                .get(`${BASE_URL}/cart`)
+                .then((res) => {
+                    const result = res.data;
+                    let cartList = result.find((item) => item.paid == false);
+                    this.carts = cartList;
+                    console.log("cart chua thanh toan", this.carts);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         },
     },
     mounted() {
-        this.id = this.$route.params.id;
-        this.product = this.foods.find((product) => product.id == this.id);
-        this.productParams = JSON.parse(localStorage.getItem("productParams"));
+        this.getFoodDetail();
+        this.getCartList();
     },
 };
 </script>

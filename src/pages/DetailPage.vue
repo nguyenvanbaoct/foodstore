@@ -221,8 +221,6 @@ export default {
         },
         addToCart() {
             if (this.carts !== undefined) {
-                console.log("them moi vao gio hang", this.carts.items);
-                console.log("total cart", this.carts.total);
                 let idCart = this.carts.id;
                 let itemsCart = this.carts.items;
                 let newItem = [
@@ -253,6 +251,7 @@ export default {
                     paid: false,
                 });
             }
+            this.$router.push({ path: "/cart" });
         },
         getCartList() {
             axios

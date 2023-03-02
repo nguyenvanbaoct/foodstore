@@ -4,7 +4,7 @@ import HomePage from "../pages/Home/HomePage.vue";
 import DetailPage from "../pages/DetailPage.vue";
 import HistoryPage from "../pages/HistoryPage.vue";
 import EditCart from "../pages/EditCart.vue";
-import Cart from "../pages/Cart/Cart.vue";
+import Cart from "../pages/Cart.vue";
 
 Vue.use(VueRouter);
 

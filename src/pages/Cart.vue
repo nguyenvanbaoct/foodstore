@@ -16,7 +16,10 @@
                         <th scope="col" class="px-6 py-3">Đơn Giá</th>
                     </tr>
                 </thead>
-                <tbody v-for="product in cartItems" :key="product.id">
+                <tbody
+                    v-for="(product, index) in cartItems"
+                    :key="index + product.id"
+                >
                     <tr class="bg-white border-b">
                         <th
                             scope="row"
@@ -34,12 +37,13 @@
                 </tbody>
             </table>
         </div>
-        <div class="flex mt-10 justify-center">
+        <div class="flex justify-center my-10">
             <div class="mr-10 pt-2 font-bold flex text-2xl">
                 Tổng tiền:
                 <p class="text-yellow-400 pl-2">$ {{ total }}</p>
             </div>
             <button
+                @click="checkOut"
                 class="font-medium text-blue-600 dark:text-blue-500 border px-5 py-2 hover:outline ml-10"
             >
                 Thanh toán
@@ -49,7 +53,7 @@
 </template>
 <script>
 import axios from "axios";
-import { BASE_URL } from "../../services/config.url";
+import { BASE_URL } from "../services/config.url";
 
 export default {
     name: "CartPage",
@@ -57,8 +61,7 @@ export default {
         return {
             cartItems: [],
             total: 0,
-            paid: false,
-            id: null,
+            idCart: 0,
         };
     },
     methods: {
@@ -70,18 +73,22 @@ export default {
                     let paidFalse = result.find((item) => item.paid == false);
                     this.cartItems = paidFalse.items;
                     this.total = paidFalse.total;
-                    this.id = result.id;
-                    this.paid = result.paid;
-                    console.log("cart paidfalse", paidFalse);
+                    this.idCart = paidFalse.id;
                 })
                 .catch((err) => {
                     console.log(err);
                 });
         },
+        checkOut() {
+            axios.put(`${BASE_URL}/cart/${this.idCart}`, {
+                paid: true,
+            });
+            this.cartItems = "";
+            this.total = "";
+        },
     },
-    mounted() {
+    created() {
         this.listCartItems();
     },
 };
 </script>
-<style lang=""></style>

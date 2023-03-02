@@ -51,7 +51,7 @@
                             <router-link
                                 to="/cart"
                                 class="block py-2 pl-3 pr-4 text-white rounded md:hover:bg-transparent md:border-0 hover:text-gray-700 md:p-0 cursor-pointer"
-                                >GIỎ HÀNG [ ]</router-link
+                                >GIỎ HÀNG {{ numCart }}</router-link
                             >
                         </li>
                     </ul>
@@ -63,5 +63,10 @@
 <script>
 export default {
     name: "HeaderLayout",
+    data() {
+        return {
+            numCart: 0,
+        };
+    },
 };
 </script>

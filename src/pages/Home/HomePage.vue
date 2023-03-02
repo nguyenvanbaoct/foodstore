@@ -4,7 +4,7 @@
     </div>
 </template>
 <script>
-import FoodCarousel from "./FoodCarousel/FoodCarousel.vue";
+import FoodCarousel from "./FoodCarousel.vue";
 export default {
     name: "HomePage",
     components: {

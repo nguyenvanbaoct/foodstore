@@ -4,7 +4,6 @@ import {
     getCartList,
     getFoodListServ,
     postCart,
-    putCart,
 } from "../services/foodServices";
 
 Vue.use(Vuex);
@@ -13,15 +12,14 @@ const storeData = {
     state: {
         foods: [],
         carts: [],
-        cartHistory: [],
         cartArr: [],
-        editCart: [],
+        cartPaidFalse: [],
     },
     getters: {
         foods: (state) => state.foods,
         carts: (state) => state.carts,
         cartArr: (state) => state.cartArr,
-        paid: (state) => state.paid,
+        cartPaidFalse: (state) => state.cartPaidFalse,
     },
     actions: {
         async getFoods({ commit }) {
@@ -49,14 +47,6 @@ const storeData = {
                 console.log(error);
             }
         },
-        async putCart({ commit }, paid) {
-            try {
-                await putCart(paid);
-                commit("EDIT_CART", paid);
-            } catch (error) {
-                console.log(error);
-            }
-        },
     },
     mutations: {
         SET_DATA(state, foods) {
@@ -68,8 +58,8 @@ const storeData = {
         ADD_CART(state, dataCart) {
             state.carts.push(dataCart);
         },
-        EDIT_CART(state, editCart) {
-            state.editCart = editCart;
+        SET_CART_PAID_FALSE(state, item) {
+            state.cartPaidFalse = item;
         },
     },
 };
